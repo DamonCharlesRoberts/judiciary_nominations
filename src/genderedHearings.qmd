@@ -1,0 +1,48 @@
+---
+title: |
+    Don’t Interrupt Me
+subtitle: |
+    The Interruption of Female and Nominees of Color in Federal Judiciary Confirmation Hearings
+repo: |
+  For replication, go to: <https://github.com/DamonCharlesRoberts/dissertation>.
+author:
+    - name: Tyler Garrett
+      email:
+      title: Independent Researcher
+    - name: Damon C. Roberts
+      email: damon.roberts-1@colorado.edu
+      orcid: 0000-0002-4360-3675
+      title: PhD Candidate
+      corresponding: true
+      affiliations:
+        - id: CU
+          name: University of Colorado Boulder
+          department: Political Science
+          address: 333 UCB
+          city: Boulder
+          region: CO 
+          postal-code: 80309-0333
+abstract: |
+  A common expectation is that the nomination process of federal court judges have become relatively more conflictual as polarization in Congress has increased over time. We expect that the degree to which one is treated differently by members of the committee is not just the result of partisan-ship but also based on one’s ascriptive characteristics like gender and race.By quantifying text, we examine the biases female nominees and nominees of color face irregardless of their political leanings. Through the analysis of transcripts from the Senate Committee for the Judiciary from 2001-2020, we found some evidence that warrants further investigation that female nominees and nominees of color are treated differently during their confirmation proceedings.  While we find no support for differences in the number of interruptions of nominees, female nominees and nominees of color do en-counter differences in the conversations they have relative to their white male counterparts.
+bibliography: "../assets/references.bib"
+format:
+  hikmah-pdf:
+    # Spit out in drafts directory
+    latex-output-dir: "../drafts"
+    # Use biblatex-chicago
+    biblatex-chicago: true
+    biblio-style: authordate
+    biblatexoptions: 
+      - backend=biber
+      - autolang=hyphen
+      - isbn=false
+      - uniquename=false
+code-overflow: wrap
+nocite: |
+  @quarto
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: true
+---
