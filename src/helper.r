@@ -23,6 +23,7 @@ box::use(
     #* frameify_text
 #' @param rawList
 #' @name rawList
+#' @export
 frameify_text <- function(rawList){
     #' frameify_text
     #' 
@@ -42,7 +43,7 @@ frameify_text <- function(rawList){
     #' ----
     #'
  
-    # Convert list element  into data.table object
+    # Convert list element into data.table object
     rawDF <- data.table(rawList)
     # Extract names and comments
         #* Define regex to find names based on titles
@@ -162,8 +163,9 @@ filter_justices <- function (df, nomineeName) {
     #' ----
     #' filteredDF(data.table): data.table object
     
+    badTitle <- c("Senator", "Chairman")
     filteredDF <- df[
-        title != "Senator" & title != "Chairman"
+        !(title %in% badTitle)
     ][
         name %in% nomineeName
     ]
