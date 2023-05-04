@@ -24,6 +24,10 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 1
+      - name: install covr
+        run: |
+          install.packages("covr")
+        shell: Rscript {0}
 
       - name: Test coverage
         run: |
