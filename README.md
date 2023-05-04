@@ -10,7 +10,6 @@
     <a href="https://github.com/DamonCharlesRoberts/seniority-project/pulls">
     <img src="https://img.shields.io/github/issues-pr-raw/DamonCharlesRoberts/judiciary_nominations.svg?style=flat-square&logo=github&logoColor=white"
          alt="GitHub pull requests"></a>
-   <a href="https://app.codecov.io/gh/DamonCharlesRoberts/judiciary_nominations?branch=main"><img src="https://codecov.io/gh/DamonCharlesRoberts/judiciary_nominations/main/graph/badge.svg"></a>
 </p>
 
 ---
