@@ -34,16 +34,16 @@ nomineeDemographics <- nomineeDemographics[
 # read pdf files, and create data.table objects from them
 
 femalePOCList <- transcripts_read(
-    folder = "../data/female_poc/"
+    folder = "../data/transcripts/female_poc/"
 )
 malePOCList <- transcripts_read(
-    folder = "../data/male_poc/"
+    folder = "../data/transcripts/male_poc/"
 )
 femaleWhiteList <- transcripts_read(
-    folder = "../data/female_white/"
+    folder = "../data/transcripts/female_white/"
 )
 maleWhiteList <- transcripts_read(
-    folder = "../data/male_white/"
+    folder = "../data/transcripts/male_white/"
 )
 
 # filter out non-nominee rows
