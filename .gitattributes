@@ -2,3 +2,4 @@
 * text=auto
 *.tex linguist-detectable=false
 *.qmd linguist-language=R
+src/_extensions/* linguist-vendored
