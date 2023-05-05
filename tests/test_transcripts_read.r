@@ -4,7 +4,7 @@
     #* Description:
         #** Test script for transcripts_read() function
     #* Updated:
-        #** 2023-05-03
+        #** 2023-05-05
         #** dcr
 
 # setup
@@ -15,6 +15,11 @@ box::use(
     ./helper[transcripts_read]
     ,testthat[...]
 )
+    #* Run function
+test_folder <- "../data/transcripts/female_poc"
+result <- transcripts_read(
+    folder = test_folder
+)
 
 # Tests
     #* return data.table objects in list
@@ -22,9 +27,7 @@ test_that(
     "data.table in list"
     ,{
         expect_s3_class(
-            transcripts_read(
-                folder = "../data/transcripts/female_poc"
-            )[[1]]
+            result[[1]]
             ,"data.table"
         ) 
     }
@@ -34,11 +37,7 @@ test_that(
     "lengths(list)"
     ,{
         expect_true(
-            length(
-                transcripts_read(
-                    folder="../data/transcripts/female_poc"
-                )
-            ) == 3
+            length(result) == 3
         )
     }
 )

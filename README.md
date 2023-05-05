@@ -21,7 +21,7 @@ For details on the repository, please see the [repository&#39;s wiki](https://gi
 ## Maintainers
 
 - [Damon C. Roberts](https://github.com/DamonCharlesRoberts)
-- Tyler Garrett
+- [Tyler Garrett](https://github.com/tpgarret)
 
 
 
