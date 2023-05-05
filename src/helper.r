@@ -11,9 +11,15 @@
 '.__module__.'
     #* load dependencies
 box::use(
-    pdftools[pdf_text]
+    pdftools[
+        pdf_text
+        ,pdf_info
+    ]
     , data.table[
         setDT
+        ,data.table
+        ,transpose
+        ,rbindlist
         ,tstrsplit
         ,fifelse
         ,fcase
@@ -270,7 +276,12 @@ transcripts_read = function(folder){
         filePath
         ,full.names = TRUE
     )
-
+    # create list of names and dates
+    fileNameSplit <- strsplit(
+        fileVector
+        ,split = "/"
+    )
+    listNames <- transpose(fileNameSplit)[[5]]
     # create a list object of the contents of the pdf files in the fileVector
     rawList <- lapply(
         fileVector
@@ -281,6 +292,7 @@ transcripts_read = function(folder){
         rawList
         ,frameify_text
     )
+    names(cleanList) <- listNames
     # return result
     return(cleanList)
 }
@@ -378,7 +390,9 @@ transcript_clean <- function (folder) {
     #' transcriptDF(data.table): a data.table object
     
     # Clean the demographics data.frame
-    demographicsClean <- filter_demographics()
+    demographicsClean <- filter_demographics()[
+        ,hearingYear:=as.numeric(hearingYear)
+    ]
 
     # Read the transcripts
     transcriptsLoaded <- transcripts_read(folder)
@@ -394,9 +408,80 @@ transcript_clean <- function (folder) {
     transcriptFilteredDF <- rbindlist(
         transcriptFiltered
         ,idcol = TRUE
-    )
+    )[
+       ,c(
+            "file_name"
+            ,"hearingMonth"
+            ,"hearingDay"
+            ,"hearingYear"
+        ):=tstrsplit(
+            .id
+            , '[_-]+'
+        ) 
+    ][
+        ,hearingYear:=as.numeric(
+            gsub(
+                ".pdf"
+                ,""
+                ,hearingYear
+            )
+        )
+    ]
 
     # Merge the demographics to the transcript data
-    transcriptDF <- demographicsClean[transcriptFilteredDF, on = "name"]
+    transcriptDF <- demographicsClean[
+        transcriptFilteredDF
+        ,on = c(
+            "name"
+            ,"hearingYear"
+        )
+    ]
+}
+    #* transcripts_all
+#' @export
+transcript_all <- function () {
+    #' transcript_all
+    #' 
+    #' Description
+    #' ----
+    #' Read all transcripts from all four folders
+    #' 
+    #' Arguments
+    #' ----
+    #' NONE
+    #' 
+    #' Returns
+    #' ----
+    #' transcripts(data.table): a data.table object
+    # make the prefix of the folder information
+    prepend <- "../data/transcripts"
+    suffix <- list(
+        "female_poc"
+        ,"male_poc"
+        ,"female_white"
+        ,"male_white"
+    )
+    # define the folder argument to be passed to transcript_clean 
+    folder <- lapply(
+        suffix
+        , function (x) {
+            paste(
+                prepend
+                ,x
+                ,sep="/"
+            )
+        }
+    )
 
+    # make a list of data.table objects from each folder
+    transcriptList <- lapply(
+        folder,
+        transcript_clean
+    )
+    names(transcriptList) <- suffix
+    # combine list elements into one data.table object
+    transcripts <- rbindlist(
+        transcriptList
+        ,idcol = TRUE
+    )
 }
