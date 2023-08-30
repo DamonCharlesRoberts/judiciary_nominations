@@ -1,24 +1,16 @@
-# Title: filter_justices
-
-# Notes:
-    #* Description:
-        #** R Script with filter_justices function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' filter out comments not made by a nominee from the transcript data
+#' 
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     ./transcript_read[
         transcript_read
     ]
 )
-
-# Define function
+#' filter_justices
+#' @param df dataframe of transcript data
+#' @param nomineeName vector of nominee names
+#' @return data.table
 #' @export
 filter_justices <- function (df, nomineeName) {
     #' filter_justices
@@ -43,4 +35,5 @@ filter_justices <- function (df, nomineeName) {
     ][
         name %in% nomineeName
     ]
+    return(filteredDF)
 }

@@ -1,17 +1,7 @@
-# Title: transcript_clean
-
-# Notes:
-    #* Description:
-        #** R Script with transcript_clean function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' wrapper to read transcripts, clean them, and merge it with demographic data
+#' 
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     ./filter_demographics[
         filter_demographics
@@ -19,29 +9,19 @@ box::use(
     ,./transcripts_read[
         transcripts_read
     ]
+    ,./filter_justices[
+        filter_justices
+    ]
     ,data.table[
         rbindlist
         ,tstrsplit
     ]
 )
-
-# Define function
+#' transcript_clean
+#' @param folder string argument
+#' @return data.table
 #' @export
 transcript_clean <- function (folder) {
-    #' transcript_clean
-    #' 
-    #' Description
-    #' ----
-    #' Wrapper function to do complete cleaning steps of transcripts
-    #' 
-    #' Arguments
-    #' ----
-    #' folder(str): a directory path to the transcripts
-    #' 
-    #' Returns
-    #' ----
-    #' transcriptDF(data.table): a data.table object
-    
     # Clean the demographics data.frame
     demographicsClean <- filter_demographics()[
         ,hearingYear:=as.numeric(hearingYear)
@@ -89,4 +69,5 @@ transcript_clean <- function (folder) {
             ,"hearingYear"
         )
     ]
+    return(transcriptDF)
 }

@@ -1,17 +1,6 @@
-# Title: transcript_all
-
-# Notes:
-    #* Description:
-        #** R Script with transcript_all function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' read the transcripts from all four folders and clean them
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     ./transcript_clean[
         transcript_clean
@@ -20,23 +9,10 @@ box::use(
         rbindlist
     ]
 )
-
-# Define function
+#' transcript_all
+#' @return data.table
 #' @export
 transcript_all <- function () {
-    #' transcript_all
-    #' 
-    #' Description
-    #' ----
-    #' Read all transcripts from all four folders
-    #' 
-    #' Arguments
-    #' ----
-    #' NONE
-    #' 
-    #' Returns
-    #' ----
-    #' transcripts(data.table): a data.table object
     # make the prefix of the folder information
     prepend <- "../data/transcripts"
     suffix <- list(
@@ -68,4 +44,5 @@ transcript_all <- function () {
         transcriptList
         ,idcol = TRUE
     )
+    return(transcripts)
 }
