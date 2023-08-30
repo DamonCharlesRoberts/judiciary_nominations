@@ -9,40 +9,40 @@
 
 # setup
     #* set path
-setwd("../src")
+setwd("./src")
     #* Load function
 box::use(
-    ./helper[
+    ./R/transcript_clean[
         frameify_text
-        ,filter_justices
+        , filter_justices
     ]
-    ,data.table[setDT]
-    ,pdftools[pdf_text]
-    ,testthat[...]
+    , data.table[setDT]
+    , pdftools[pdf_text]
+    , testthat[...]
 )
 
     #* make a data.table object out of an example document
         #** load example file for tests
-exampleFile <- pdf_text("../data/transcripts/female_poc/CHRG-108shrg93738.pdf")
+example_file <- pdf_text("../data/transcripts/female_poc/brown_10-22-2003.pdf")
         #** make data.table of it
-exampleDF <- frameify_text(
-    exampleFile
+example_df <- frameify_text(
+    example_file
 )
         #** load demographics csv for names
-nomineeDemographics <- setDT(
+nominee_demographics <- setDT(
     read.csv(
         file = "../data/judge_demographic_data.csv"
     )
 )
-nomineeDemographics <- nomineeDemographics[
-    ,name:=toupper(Last.Name)
+nominee_demographics <- nominee_demographics[
+    , name := toupper(Last.Name)
 ]
 
 # Tests
     #* check to make sure people provide an arg
 test_that(
     "one arg"
-    ,{
+    , {
         expect_error(
             filter_justices()
         )
@@ -51,35 +51,35 @@ test_that(
     #* check that people provide both args
 test_that(
     "both args"
-    ,{
+    , {
         expect_error(
-            filter_justices(exampleDF)
+            filter_justices(example_df)
         )
     }
 )
     #* check to make sure that it doesn't return empty columns
 test_that(
     "empty rows"
-    ,{
+    , {
         expect_true(
             nrow(
                 filter_justices(
-                    exampleDF
-                    ,nomineeName=nomineeDemographics$name
+                    example_df
+                    , nominee_name = nominee_demographics$name
                 )
-            ) !=0
+            ) != 0
         )
     }
 )
     #* check to  make sure that it doesn't return specific titles
 test_that(
     "bad titles"
-    ,{
+    , {
         expect_true(
             !(
                 filter_justices(
-                    exampleDF
-                    ,nomineeName=nomineeDemographics$name
+                    example_df
+                    , nominee_name = nominee_demographics$name
                 )$title[[1]] %in% c("Senator", "Chairman")
             )
         )
