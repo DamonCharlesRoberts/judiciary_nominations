@@ -1,17 +1,6 @@
-# Title: frameify_text
-
-# Notes:
-    #* Description:
-        #** R Script with frameify_text function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' organizes the pdf text as a clean dataframe
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     data.table[
         transpose
@@ -24,26 +13,11 @@ box::use(
     ]
 )
 
-# Define function
+#' transcripts read
+#' @param folder string argument
+#' @return list of dataframes
 #' @export
 transcripts_read <- function (folder) {
-    #' transcripts_read
-    #' 
-    #' Description
-    #' ----
-    #' Takes a folder path, finds all of the pdf files in that directory...
-    #' ... reads the text from the pdf files ...
-    #' ... and organizes it into a data.frame
-    #' 
-    #' Arguments
-    #' ----
-    #' - folder(dir): the directory containing the pdf files needing to be read
-    #' 
-    #' Depends
-    #' ---
-    #' - pdftools::pdf_text()
-    #' 
-    
     #* Define the file path
     filePath <- paste(
         folder

@@ -1,17 +1,7 @@
-# Title: frameify_text
-
-# Notes:
-    #* Description:
-        #** R Script with frameify_text function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' load the pdf files and put the raw data in a dataframe
+#' 
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     data.table[
         data.table
@@ -19,27 +9,11 @@ box::use(
     ]
 )
 
-# Define funciton
+#' frameify_text
+#' @params rawList
+#' @return data.table
 #' @export
-frameify_text <- function(rawList){
-    #' frameify_text
-    #' 
-    #' Description
-    #' ----
-    #' Takes a list of raw text...
-    #' ... extracts names and comments from each list element
-    #' ... and puts in a data.frame
-    #' Note: dependency function for transcripts_read
-    #' 
-    #' Arguments
-    #' ----
-    #' 
-    #' - rawList(list): list of text
-    #' 
-    #' Depends
-    #' ----
-    #'
- 
+frameify_text <- function (rawList) { 
     # Convert list element into data.table object
     rawDF <- data.table(rawList)
     # Extract names and comments
@@ -92,4 +66,5 @@ frameify_text <- function(rawList){
             , fixed = TRUE
         )
     ]
+    return(cleanDF)
 }

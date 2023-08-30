@@ -1,22 +1,12 @@
-# Title: filter_demographics
-
-# Notes:
-    #* Description:
-        #** R Script with filter_demographics function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
+#' load the nominee background data and clean it
+#' 
 '.__module__.'
-    #* Load dependencies
+#' dependencies
 box::use(
     utils[read.csv]
 )
-
-# Define function
+#' filter_demographics
+#' @return data.table
 #' @export
 filter_demographics <- function () {
     #' filter_demographics
