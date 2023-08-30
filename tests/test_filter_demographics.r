@@ -12,9 +12,9 @@
 setwd("src")
     #* Load function
 box::use(
-    ./helper[filter_demographics]
+    ./R/transcript_clean[filter_demographics]
     , data.table[setDT]
-    ,testthat[...]
+    , testthat[...]
 )
     #* run function and store result
 result <- filter_demographics()
@@ -22,16 +22,16 @@ result <- filter_demographics()
     #* Check the number of columns
 test_that(
     "check columns"
-    ,{
+    , {
         expect_true(
-            ncol(result) == ncol(result)
+            ncol(result) == 4
         )
     }
 )
     #* Check that there is at least a names column
 test_that(
     "check name col"
-    ,{
+    , {
         expect_true(
             "name" %in% colnames(
                 result
@@ -42,7 +42,7 @@ test_that(
     #* check that there aren't duplicate rows
 test_that(
     "check duplicate rows"
-    ,{
+    , {
         expect_true(
             nrow(
                 result[
@@ -51,15 +51,14 @@ test_that(
                             result
                             , by = c(
                                 "name"
-                                ,"birthYear"
-                                , "hearingYear"
-                                , "courtType"
+                                , "birth_year"
+                                , "hearing_year"
+                                , "court_type"
                             )
                         )
                     )
             ]
-              
             ) == 0
-        ) 
+        )
     }
 )

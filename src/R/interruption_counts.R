@@ -1,42 +1,26 @@
-# Title: interruption_counts
-
-# Notes:
-    #* Description:
-        #** R Script with interruption_counts function
-    #* Updated
-        #** 2023-05-05
-        #** dcr
-# Setup
-    #* define working directory
-setwd("./src/R")
-    #* define this as a module
-'.__module__.'
-    #* Load dependencies
-box::use(
-    
-)
-
-# Define function
-#' @export
-interruption_counts <- function(df) {
-    #' interruption_counts
-    #' 
-    #' Description
-    #' ----
-    #' creates a column counting the number of interruptions a nominee faces
-    #' 
-    #' Arguments
-    #' ----
-    #' - df(data.table): data.table object
-    #' 
-    #' Returns
-    #' ----
-    #' - countDF(data.table): data.table object
-    countDF <- df[
+#' @title interruption_counts
+#'
+#' @description
+#' Detects and records the number of interruptions based on presence
+#' of em-dashes.
+#'
+#' @details
+#' This function determines the number of interruptions made by members
+#' of the committee for all nominees based on the presence of em-dashes.
+#' It documents the count for each member by creating a new column.
+#'
+#' @importFrom data.table :=
+#' @importFrom stringr::str_count
+interruption_counts <- function(df) { # nolint
+    count_df <- df[
         #** create a new column with NA values
-        ,count:=NA_integer_
+        , count := NA_integer_ # nolint
     ][
         #** update the count column and add count of em-dashes for the row
-        ,count:=str_count(comments, pattern="—{2,}")
+        , count := stringr::str_count(
+          comment # nolint
+          , pattern = "(^—|—\\\\n$)"
+        )
     ]
+    return(count_df)
 }

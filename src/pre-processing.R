@@ -1,7 +1,7 @@
 # Title: pre-processing
 
 # Notes:
-    #* Description: 
+    #* Description:
         #** R script to perform pre-processing
     #* Updated:
         #** 2023-05-03
@@ -12,16 +12,19 @@
 setwd("./src")
     #* Load relevant functions
 box::use(
-    ./helper[
-        transcript_clean
-    ]
-    ,data.table[
+    ./R/transcript_all[...]
+    , ./R/interruption_counts[...]
+    , data.table[
         setDT
-        ,rbindlist
+        , rbindlist
     ]
 )
 
 # Load transcript and nominee information
-cleaned <- transcript_clean(
+cleaned_df <- transcript_clean(
     folder = "../data/transcripts/female_poc"
 )
+
+# Count
+count_df <- interruption_counts(cleaned_df)
+View(count_df)
