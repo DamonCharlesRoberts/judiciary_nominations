@@ -1,4 +1,3 @@
 # Auto detect text files and perform LF normalization
 *.qmd linguist-language=R
-*.tex linguist-language=R
 src/_extensions/ linguist-documentation
