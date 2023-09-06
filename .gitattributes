@@ -3,4 +3,4 @@
 *.lua linguist-detectable=false
 *.qmd linguist-language=R
 *.tex linguist-language=R
-src/_extensions/andrewheiss/** linguist-vendored
+src/_extensions/andrewheiss/hikmah/** linguist-vendored
