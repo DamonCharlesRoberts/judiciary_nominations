@@ -1,1 +1,2 @@
-* language-vendored
+**/*.tex language-vendored
+*.tex
