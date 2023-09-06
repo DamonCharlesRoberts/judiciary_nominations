@@ -1,3 +1,4 @@
 # Auto detect text files and perform LF normalization
 *.qmd linguist-language=R
-**/*.tex linguist-vendored
+src/_extensions/**/*.tex linguist-vendored
+*.tex linguist-vendored
