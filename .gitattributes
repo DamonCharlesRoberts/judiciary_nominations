@@ -3,4 +3,4 @@
 *.tex linguist-detectable=false
 *.tex linguist-language=R
 *.qmd linguist-language=R
-src/_extensions/ linguist-vendored
+src/_extensions/* linguist-vendored
