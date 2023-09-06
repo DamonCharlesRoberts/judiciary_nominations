@@ -1,6 +1,4 @@
 # Auto detect text files and perform LF normalization
-*.tex linguist-detectable=false
-*.lua linguist-detectable=false
 *.qmd linguist-language=R
 *.tex linguist-language=R
-src/_extensions/andrewheiss/hikmah/** linguist-vendored
+src/_extensions/ linguist-documentation
