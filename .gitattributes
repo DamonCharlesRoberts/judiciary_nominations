@@ -1,0 +1,5 @@
+# Auto detect text files and perform LF normalization
+*.qmd linguist-language=R
+src/_extensions/andrewheiss/hikmah/**/*.tex linguist-vendored
+src/_extensions/andrewheiss/hikmah-manuscript/**/*.tex linguist-vendored
+*.tex linguist-vendored

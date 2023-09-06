@@ -1,0 +1,7 @@
+# Ignore IDE file
+.vscode/
+desktop.ini
+# ignore folders
+archived/
+data/transcripts
+data/transcripts.zip
