@@ -1,6 +1,5 @@
 # Auto detect text files and perform LF normalization
-* text=auto
-**/*.tex linguist-detectable=false
-**/*.tex linguist-language=R
+*.tex linguist-detectable=false
+*.lua linguist-detectable=false
 *.qmd linguist-language=R
-src/_extensions/** linguist-vendored
+*.tex linguist-language=R
