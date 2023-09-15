@@ -5,3 +5,8 @@
 /src/_extensions/andrewheiss/hikmah-manuscript/partials/*.tex linguist-vendored
 /src/_extensions/andrewheiss/hikmah-manuscript/*.tex linguist-vendored
 *.tex linguist-vendored
+data/transcripts filter=lfs diff=lfs merge=lfs -text
+data/transcripts/male_white.zip filter=lfs diff=lfs merge=lfs -text
+data/transcripts/female_poc.zip filter=lfs diff=lfs merge=lfs -text
+data/transcripts/female_white.zip filter=lfs diff=lfs merge=lfs -text
+data/transcripts/male_poc.zip filter=lfs diff=lfs merge=lfs -text
