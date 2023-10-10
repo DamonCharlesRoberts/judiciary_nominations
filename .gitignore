@@ -1,7 +1,7 @@
 # Ignore IDE file
 .vscode/
 desktop.ini
-.DS_Store
+**/.DS_Store
 # ignore folders
 archived
 data/transcripts
