@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "tg-dcr-interruptions"
+version = "0.1.0"
+description = ""
+authors = ["DamonCharlesRoberts <damon.charles.roberts@gmail.com>"]
+readme = "README.md"
+packages = [{include = "tg_dcr_interruptions"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+PyPDF2 = "^3.0.1"
+polars = "^0.19.7"
+tabula-py = "^2.8.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
