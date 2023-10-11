@@ -10,8 +10,20 @@
 
 # Setup
 	#* Load libraries
+import polars as pl
+from os import listdir, path
 from src.helper import read_text
 
 # Convert PDF's to a dataframe
-df = read_text()
-df_2 = read_text(file = "./data/transcripts/female_poc/bryant_09-26-2006.pdf")
+dir_path = "./data/transcripts/female_poc/"
+
+list_rel_files = listdir(dir_path)
+
+list_files = [path.join(dir_path, x) for x in list_rel_files]
+
+
+# Iterate over the pdf documents to produce a list of polars dataframes
+list_dfs = list(map(read_text, list_files))
+
+# Collapse the list of data.frames into a single data.frame
+df = pl.concat(list_dfs, rechunk=True)

@@ -10,10 +10,10 @@
 import re
 import polars as pl
 
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 def read_text(
-        file = "./data/transcripts/female_poc/brown_10-22-2003.pdf"
+        file_name = "./data/transcripts/female_poc/brown_10-22-2003.pdf"
     ):
     """Convert text in a confirmation hearing PDF to a polars data.frame
 
@@ -32,7 +32,7 @@ def read_text(
     base_pattern = r'Chairman\s[A-Z]{2,}|Senator\s[A-Z]{2,}|Justice\s[A-Z]{2,}|Judge\s[A-Z]{2,}|Mr\.\s[A-Z]{2,}|Ms\.\s[A-Z]{2,}|Mrs\.\s[A-Z]{2,}'
 
     # Load file
-    file = PdfReader(file)
+    file = PdfReader(file_name)
 
     # Read the contents of the file...
     # then convert into a python string.
@@ -106,7 +106,7 @@ def read_text(
         # Find all capitalized months 
         # followed by a space and a 1 or 2 digit date 
         # a comma then a space and then a four day digit
-        r'(?:JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+\d{1,2},\s+\d{4}',
+        r'(?:JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+(?:\d{1,2}|\d{1,2}–\d{1,2}),\s+\d{4}',
         # look for this in the meta_output string
         meta_output
     ).group(0) # once this has been found, grab that matching sub-string
@@ -118,5 +118,7 @@ def read_text(
         hearing_date = pl.lit(str_date)
     )
     
+    # print file name
+    print(file_name)
     # return the cleaned polars dataframe
     return df_cleaned

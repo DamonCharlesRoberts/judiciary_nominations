@@ -11,6 +11,8 @@ python = "^3.11"
 PyPDF2 = "^3.0.1"
 polars = "^0.19.7"
 tabula-py = "^2.8.2"
+pytest = "^7.4.2"
+pypdf = "^3.16.4"
 
 
 [build-system]

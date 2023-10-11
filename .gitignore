@@ -2,6 +2,8 @@
 .vscode/
 desktop.ini
 .DS_Store
+# Ignore python files
+**/__pycache__/
 # ignore folders
 archived
 data/transcripts
