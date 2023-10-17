@@ -13,6 +13,10 @@ polars = "^0.19.7"
 tabula-py = "^2.8.2"
 pytest = "^7.4.2"
 pypdf = "^3.16.4"
+pyment = "^0.3.3"
+duckdb = "^0.9.1"
+pyarrow = "^13.0.0"
+harlequin = "^1.1.1"
 
 
 [build-system]

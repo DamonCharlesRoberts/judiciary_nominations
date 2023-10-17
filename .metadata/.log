@@ -1,0 +1,42 @@
+
+!ENTRY org.eclipse.ui.ide 4 4 2023-10-17 11:03:40.420
+!MESSAGE Problems saving workspace
+
+!ENTRY org.eclipse.ui.ide 4 1 2023-10-17 11:03:40.423
+!MESSAGE Problems occurred while trying to save the state of the workbench.
+!SUBENTRY 1 org.eclipse.core.resources 4 568 2023-10-17 11:03:40.423
+!MESSAGE Could not write workspace metadata '/Users/dcr/Library/Mobile Documents/com~apple~CloudDocs/current_projects/tg_dcr_interruptions/.metadata/.plugins/org.eclipse.core.resources/.root/1.tree'.
+!STACK 0
+java.io.FileNotFoundException: /Users/dcr/Library/Mobile Documents/com~apple~CloudDocs/current_projects/tg_dcr_interruptions/.metadata/.plugins/org.eclipse.core.resources/.root/1.tree (No such file or directory)
+	at java.base/java.io.FileOutputStream.open0(Native Method)
+	at java.base/java.io.FileOutputStream.open(Unknown Source)
+	at java.base/java.io.FileOutputStream.<init>(Unknown Source)
+	at java.base/java.io.FileOutputStream.<init>(Unknown Source)
+	at org.eclipse.core.internal.localstore.SafeFileOutputStream.<init>(SafeFileOutputStream.java:55)
+	at org.eclipse.core.internal.resources.SaveManager.saveTree(SaveManager.java:1395)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1177)
+	at org.eclipse.core.internal.resources.Workspace.save(Workspace.java:2423)
+	at org.eclipse.ui.internal.ide.application.IDEWorkbenchAdvisor.lambda$1(IDEWorkbenchAdvisor.java:554)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+
+!ENTRY org.jkiss.dbeaver.model 4 0 2023-10-17 11:03:41.495
+!MESSAGE Can't stop instance server
+!SUBENTRY 1 org.jkiss.dbeaver.model 4 0 2023-10-17 11:03:41.495
+!MESSAGE /Users/dcr/Library/Mobile Documents/com~apple~CloudDocs/current_projects/tg_dcr_interruptions/.metadata/dbeaver-instance.properties
+!STACK 0
+java.nio.file.NoSuchFileException: /Users/dcr/Library/Mobile Documents/com~apple~CloudDocs/current_projects/tg_dcr_interruptions/.metadata/dbeaver-instance.properties
+	at java.base/sun.nio.fs.UnixException.translateToIOException(Unknown Source)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(Unknown Source)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.implDelete(Unknown Source)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.delete(Unknown Source)
+	at java.base/java.nio.file.Files.delete(Unknown Source)
+	at org.jkiss.dbeaver.ui.app.standalone.rpc.DBeaverInstanceServer.stopInstanceServer(DBeaverInstanceServer.java:293)
+	at org.jkiss.dbeaver.ui.app.standalone.DBeaverApplication.lambda$5(DBeaverApplication.java:665)
+	at org.jkiss.dbeaver.utils.RuntimeUtils$MonitoringTask.run(RuntimeUtils.java:562)
+	at org.jkiss.dbeaver.utils.RuntimeUtils$1.run(RuntimeUtils.java:253)
+	at org.jkiss.dbeaver.model.runtime.AbstractJob.run(AbstractJob.java:105)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.core.resources 2 10035 2023-10-17 11:03:41.635
+!MESSAGE The workspace will exit with unsaved changes in this session.

@@ -1,0 +1,5 @@
+driver.selector.orderBy=score
+eclipse.preferences.version=1
+sample.database.canceled=true
+tipOfTheDayInitializer.notFirstRun=true
+ui.auto.update.check.time=1697561629465
