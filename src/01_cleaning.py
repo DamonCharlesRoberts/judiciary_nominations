@@ -12,16 +12,18 @@
 	#* Load libraries
 import polars as pl
 import duckdb as db
-from os import listdir, path
+from os import listdir, path, walk
 from preProcessing.loading import Cleaning
+    #* if running interactively, uncomment this and comment line above
+#from src.preProcessing.loading import Cleaning
     #* Connect to a duckdb database
 conn = db.connect("./data/project_database.db")
 # Convert PDF's to a dataframe
-dir_path = "./data/transcripts/female_poc/"
+dir_path = "./data/transcripts/"
 
-list_rel_files = listdir(dir_path)
-
-list_files = [path.join(dir_path, x) for x in list_rel_files]
+list_files = [
+    path.join(root, name) for root, dirs, files in walk(dir_path) for name in files if name.endswith('.pdf')
+]
 
 # Iterate over the pdf documents to produce a list of polars dataframes
 list_dfs = [Cleaning.read_text(f) for f in list_files]

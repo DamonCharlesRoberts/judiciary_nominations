@@ -111,7 +111,7 @@ class Cleaning:
             # Find all capitalized months 
             # followed by a space and a 1 or 2 digit date 
             # a comma then a space and then a four day digit
-            r'(?:JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+(?:\d{1,2}|\d{1,2}–\d{1,2}),\s+\d{4}',
+            r'(?:JANUARY|FEBRUARY|MARCH|March|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+(?:\d{1,2}|\d{1,2}–\d{1,2}|\d{1,2},\s\d{1,2},\s\d{1,2},\s\d{1,2},\s(and)\s\d{1,2}|\d{1,2},\s\d{1,2},\s\d{1,2},\s(and)\s\d{1,2}),\s+\d{4}',
             # look for this in the meta_output string
             meta_output
         ).group(0) # once this has been found, grab that matching sub-string
@@ -122,6 +122,6 @@ class Cleaning:
             # that takes the str_date string and pastes it in for each row
             hearing_date = pl.lit(str_date)
         )
-
+        print(file_name)
         # Return the cleaned df
         return df_cleaned

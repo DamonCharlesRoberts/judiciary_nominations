@@ -12,84 +12,83 @@
 
 /*
 	create a table that splits the title of the speaker and their name into two columns
-	- Takes all of the rows, then does a subquery that uses a duckdb function that splits ...
-	  the speaker column based on the presence of a space. It takes the first part and places ...
-	  it in a title column and the second part in a name column
+	- Takes all of the rows, then does a subquery that uses a duckdb function that extracts ...
+	  strings indicating the HearingMonth, HearingDay, and HearingYear. It has an additional ...
+	  subquery that splits the speaker column based on the presence of a space. 
+	  It takes the first part and places it in a title column and the second part in a name column.
 	- Stores this all into a new table called TranscriptTable
 */
-CREATE OR REPLACE TABLE 
-	main.TranscriptTable
-AS SELECT 
-	raw_string,
-	speaker,
-	text,
+CREATE OR REPLACE VIEW -- create a veiw
+	main.TranscriptTable -- called TranscriptTable
+AS SELECT  -- select the following columns
+	raw_string, -- ... the raw_string column
+	speaker, -- ...the speaker column
+	text, -- a column called text
 	(
-		SELECT CASE 
-			WHEN split_part(hearing_date, ' ', 1) = 'JANUARY' THEN 1
-			WHEN split_part(hearing_date, ' ', 1) = 'FEBRUARY' THEN 2
-			WHEN split_part(hearing_date, ' ', 1) = 'MARCH' THEN 3
-			WHEN split_part(hearing_date, ' ', 1) = 'APRIL' THEN 4
-			WHEN split_part(hearing_date, ' ', 1) = 'MAY' THEN 5
-			WHEN split_part(hearing_date, ' ', 1) = 'JUNE' THEN 6
-			WHEN split_part(hearing_date, ' ', 1) = 'JULY' THEN 7
-			WHEN split_part(hearing_date, ' ', 1) = 'AUGUST' THEN 8
-			WHEN split_part(hearing_date, ' ', 1) = 'SEPTEMBER' THEN 9
-			WHEN split_part(hearing_date, ' ', 1) = 'OCTOBER' THEN 10
-			WHEN split_part(hearing_date, ' ', 1) = 'NOVEMBER' THEN 11
-			WHEN split_part(hearing_date, ' ', 1) = 'DECEMBER' THEN 12
-		END AS HearingMonth
-	) AS HearingMonth,
-	(SELECT replace(split_part(hearing_date, ' ', 2), ',', '')) AS HearingDay,
-	(SELECT split_part(hearing_date, ' ', 3)) AS HearingYear,
-	(SELECT split_part(speaker, ' ', 1)) AS Title,
-	(SELECT split_part(speaker, ' ', 2)) AS Name
+		SELECT CASE -- a subquery to change values of the HearingMonth column
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'JANUARY' THEN 1 -- When the hearing date contains January in all caps, code it to one
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'FEBRUARY' THEN 2 -- when the hearing date contains February in all caps., code it to 2
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'MARCH' THEN 3 -- etc.
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'APRIL' THEN 4
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'MAY' THEN 5
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'JUNE' THEN 6
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'JULY' THEN 7
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'AUGUST' THEN 8
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'SEPTEMBER' THEN 9
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'OCTOBER' THEN 10
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'NOVEMBER' THEN 11
+			WHEN UPPER(split_part(hearing_date, ' ', 1)) = 'DECEMBER' THEN 12
+		END AS HearingMonth -- and a HearingMonth column based on the conditions above
+	) AS HearingMonth, -- store it as HearingMonth in the view
+	(SELECT regexp_extract(hearing_date, '\d{1,2}', 0)) AS HearingDay, -- Create a column called HearingDay by grabbing the first instance of a 1 or two digit string
+	(SELECT regexp_extract(hearing_date, '[0-9]{4}', 0)) AS HearingYear, -- Create a column called HearingYear by grabbing the first instance of a 4 digit string
+	(SELECT split_part(speaker, ' ', 1)) AS Title, -- Grab the title of the speaker by splitting the string on a space and grabbing the first element
+	(SELECT split_part(speaker, ' ', 2)) AS Name -- Grab the name of the speaker by grabbing the second element of the split string
 FROM
-	transcript_text
+	transcript_text -- all of this should come from the transcript_text table
 COMMIT;
 
-SELECT * FROM TranscriptTable
+/* A Check of how many rows are retained */
+
+SELECT COUNT(text) FROM main.TranscriptTable -- select a count of the number of rows in the TranscriptTable view
+
 /*
-	add a string column to 
+	Now on to the demographics table.
+	- Rename the `Last Name` column to LastName
+	- Convert the strings to Upper case in the LastName column.
  */
 
-/*
-	convert the Last Name column to Upper
-	- Rename the column to LastName
-	- And Convert the strings to upper case
-*/
-
-
-ALTER TABLE
+ALTER TABLE -- alter the demographics table
 	main.demographics
-RENAME COLUMN
-	"Last Name" TO LastName;
+RENAME COLUMN -- rename the column ...
+	"Last Name" TO LastName; -- .. the `Last Name` columns should now be LastName
 
-UPDATE 
+UPDATE -- update the demographics table
 	main.demographics
-SET
+SET -- and set the contents of the LastName column to the Upper case strings of the LastName column
 	LastName = UPPER(LastName);
 
 /* 
 	create a temporary demographics table that converts it from wide to long format 
 */
-CREATE TABLE main.TempDemographics
-AS SELECT
-	LastName,
-	"First Name" AS FirstName,
-	Gender,
-	"Race or Ethnicity" AS Race,
-	"Court Type (1)" AS CourtType,
-	"Party of Appointing President (1)" AS PartyOfPresident,
+CREATE OR REPLACE VIEW main.TempDemographics -- create a temporary view called TempDemographics
+AS SELECT -- and store the following columns
+	LastName, -- the last name column
+	"First Name" AS FirstName, -- the first name column as FirstName
+	Gender, -- Gender column
+	"Race or Ethnicity" AS Race, -- Race or Ethnicity column but as Race
+	"Court Type (1)" AS CourtType, -- Court Type (1) column but as CourtType
+	"Party of Appointing President (1)" AS PartyOfPresident, --- etc.
 	"Party of Reappointing President (1)" AS PartyOfReappointingPresident,
 	"ABA Rating (1)" AS ABARating,
-	(SELECT split_part("Hearing Date (1)", '/', 1)) AS HearingMonth,
-	(SELECT split_part("Hearing Date (1)", '/', 2)) AS HearingDay,
-	(SELECT split_part("Hearing Date (1)", '/', 3)) AS HearingYear,
-	"Judiciary Committee Action (1)" AS CommitteeAction,
-	1 AS Appointment
+	(SELECT split_part("Hearing Date (1)", '/', 1)) AS HearingMonth, -- When I see a / in the Hearing Date (1) column, grab the first part and store it as HearingMonth
+	(SELECT split_part("Hearing Date (1)", '/', 2)) AS HearingDay, -- When I see a / in the Hearing Date (1) column, grab the second part and store it as HearingDay
+	(SELECT split_part("Hearing Date (1)", '/', 3)) AS HearingYear, -- When I see a / in the Hearing Date (1) column, grab the third part and store it as HearingYear
+	"Judiciary Committee Action (1)" AS CommitteeAction, -- Judiciary Committee Action (1) as CommitteeAction
+	1 AS Appointment -- And store the value 1 in a column called Appointment
 FROM
-	main.demographics
-UNION ALL
+	main.demographics -- get all of this from the demographics table
+UNION ALL -- take that table, and then append a table very much like the first but with information about the second appointment (if exists)
 SELECT
 	LastName,
 	"First Name" AS FirstName,
@@ -106,8 +105,8 @@ SELECT
 	2 AS Appointment
 FROM
 	main.demographics
-WHERE "Hearing Date (2)" IS NOT NULL
-UNION ALL
+WHERE "Hearing Date (2)" IS NOT NULL -- only do this if there is an actual reported second hearing date
+UNION ALL -- Again, append another table if there was a third appointment
 SELECT
 	LastName,
 	"First Name" AS FirstName,
@@ -124,8 +123,8 @@ SELECT
 	3 AS Appointment
 FROM
 	main.demographics
-WHERE "Hearing Date (3)" IS NOT NULL
-UNION ALL
+WHERE "Hearing Date (3)" IS NOT NULL -- only do this if there was an actual reported third hearing date
+UNION ALL -- Again, append another table if there was a fourth appointment
 SELECT
 	LastName,
 	"First Name" AS FirstName,
@@ -142,8 +141,8 @@ SELECT
 	4 AS Appointment
 FROM
 	main.demographics
-WHERE "Hearing Date (4)" IS NOT NULL
-UNION ALL
+WHERE "Hearing Date (4)" IS NOT NULL -- only do this if there was an actual reported fourth hearing date
+UNION ALL -- Again, append another table if there was a fifth appointment
 SELECT
 	LastName,
 	"First Name" AS FirstName,
@@ -160,8 +159,8 @@ SELECT
 	5 AS Appointment
 FROM
 	main.demographics
-WHERE "Hearing Date (5)" IS NOT NULL
-UNION ALL
+WHERE "Hearing Date (5)" IS NOT NULL -- only do this if there was an actual reported fifth hearing date
+UNION ALL -- Again, append a table if there was a 6th hearing date
 SELECT
 	LastName,
 	"First Name" AS FirstName,
@@ -178,31 +177,64 @@ SELECT
 	1 AS Appointment
 FROM
 	main.demographics
-WHERE "Hearing Date (6)" IS NOT NULL;
+WHERE "Hearing Date (6)" IS NOT NULL; -- but only do this if there was an actual reported sixth hearing date
 
--- Check accuracy of pivoting table from wide to long format
-SELECT 
-	COUNT(HearingYear)
+/* Check accuracy of pivoting table from wide to long format */
+SELECT -- grab a count of the number of appointments and in what year
+	COUNT(Appointment),
+	HearingYear
 FROM 
-	main.TempDemographics
+	main.TempDemographics -- from the demographics table
 GROUP BY 
-	Appointment;
+	HearingYear; -- when grouped by hearing year
 
 /*
 	join the TranscriptText and the demographics tables
-	- Use a inner join
+	- Use a left join
 */
 
-CREATE TABLE MergedTable
-AS SELECT
+CREATE OR REPLACE TABLE MergedTable -- create a new table called MergedTable
+AS SELECT -- select all of the columns
 	*
 FROM
-	main.TranscriptTable AS t
-LEFT JOIN
+	main.TranscriptTable AS t -- from the TranscriptTable that I alias as t
+LEFT JOIN -- and left join this with the TempDemographics table that I alias as d
 	main.TempDemographics AS d
-	ON
-		t.HearingYear=d.HearingYear
+	ON -- and do this merge on the following
+		t.HearingYear=d.HearingYear -- the HearingYear columns
+		AND 
+		CAST(t.HearingMonth AS VARCHAR)=d.HearingMonth -- as well as the HearingMonth columns if a tie in HearingYear
 		AND
-		CAST(t.HearingMonth AS VARCHAR)=d.HearingMonth;
+		t.HearingDay=d.HearingDay -- as well as HearingDay if a tie in HearingYear and HearingMonth
+		AND
+		t.Name=d.LastName; -- as well as Name of speaker if a tie in HearingYear, HearingMonth, and HearingDay
 
-SELECT * FROM main.MergedTable;
+/* Check to see if the merge worked */
+		
+CREATE VIEW TempMerged -- create a temporary view
+AS SELECT -- and select the count of rows as well as the HearingYear
+	COUNT(m.speaker),
+	m.HearingYear
+FROM
+	main.MergedTable AS m -- from the merged table
+GROUP BY
+	m.HearingYear; -- when it is grouped by the HearingYear
+
+CREATE VIEW TempTranscript -- create a temporary view
+AS SELECT -- and select the count of rows as well as the HearingYear
+	COUNT(t.speaker),
+	t.HearingYear
+FROM
+	main.TranscriptTable AS t -- from the transcript table
+GROUP BY -- when it is grouped by the HearingYear
+	t.HearingYear
+	
+SELECT -- Grab all of the columns
+	*
+FROM main.TempMerged AS m -- from the temporary view for the MergedTable
+INNER JOIN -- and join it with
+	main.TempTranscript AS t -- the temporary view for the TranscriptTable
+	ON -- based on  HearingYear
+	m.HearingYear=t.HearingYear
+ORDER BY -- then sort the results in Descending order by the HearingYear
+	m.HearingYear DESC; -- the counts for each HearingYear should match between the two tables (merged). And they do!
