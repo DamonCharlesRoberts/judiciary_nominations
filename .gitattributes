@@ -7,8 +7,3 @@
 *.tex linguist-vendored
 /src/**.R linguist-vendored
 /test/**.R linguist-vendored
-data/transcripts filter=lfs diff=lfs merge=lfs -text
-data/transcripts/male_white.zip filter=lfs diff=lfs merge=lfs -text
-data/transcripts/female_poc.zip filter=lfs diff=lfs merge=lfs -text
-data/transcripts/female_white.zip filter=lfs diff=lfs merge=lfs -text
-data/transcripts/male_poc.zip filter=lfs diff=lfs merge=lfs -text
