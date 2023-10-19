@@ -10,6 +10,16 @@
 			dcr
 */
 
+/* 
+	Create the demographics view by loading in CSV
+	
+*/
+CREATE OR REPLACE VIEW
+	main.Demographics
+AS SELECT
+	*
+FROM
+	read_csv_auto('~/Library/Mobile Documents/com~apple~CloudDocs/current_projects/tg_dcr_interruptions/data/judge_demographic_data.csv'); -- NO RELATIVE PATH :/
 /*
 	create a table that splits the title of the speaker and their name into two columns
 	- Takes all of the rows, then does a subquery that uses a duckdb function that extracts ...
@@ -45,35 +55,20 @@ AS SELECT  -- select the following columns
 	(SELECT split_part(speaker, ' ', 1)) AS Title, -- Grab the title of the speaker by splitting the string on a space and grabbing the first element
 	(SELECT split_part(speaker, ' ', 2)) AS Name -- Grab the name of the speaker by grabbing the second element of the split string
 FROM
-	transcript_text -- all of this should come from the transcript_text table
+	TranscriptText -- all of this should come from the TranscriptText table
 COMMIT;
 
 /* A Check of how many rows are retained */
 
 SELECT COUNT(text) FROM main.TranscriptTable; -- select a count of the number of rows in the TranscriptTable view
 
-/*
-	Now on to the demographics table.
-	- Rename the `Last Name` column to LastName
-	- Convert the strings to Upper case in the LastName column.
- */
-
-ALTER TABLE -- alter the demographics table
-	main.demographics
-RENAME COLUMN -- rename the column ...
-	"Last Name" TO LastName; -- .. the `Last Name` columns should now be LastName
-
-UPDATE -- update the demographics table
-	main.demographics
-SET -- and set the contents of the LastName column to the Upper case strings of the LastName column
-	LastName = UPPER(LastName);
 
 /* 
 	create a temporary demographics table that converts it from wide to long format 
 */
 CREATE OR REPLACE VIEW main.TempDemographics -- create a temporary view called TempDemographics
 AS SELECT -- and store the following columns
-	LastName, -- the last name column
+	UPPER("Last Name") AS LastName, -- the last name column
 	"First Name" AS FirstName, -- the first name column as FirstName
 	Gender, -- Gender column
 	"Race or Ethnicity" AS Race, -- Race or Ethnicity column but as Race
@@ -87,10 +82,10 @@ AS SELECT -- and store the following columns
 	"Judiciary Committee Action (1)" AS CommitteeAction, -- Judiciary Committee Action (1) as CommitteeAction
 	1 AS Appointment -- And store the value 1 in a column called Appointment
 FROM
-	main.demographics -- get all of this from the demographics table
+	main.Demographics -- get all of this from the demographics table
 UNION ALL -- take that table, and then append a table very much like the first but with information about the second appointment (if exists)
 SELECT
-	LastName,
+	UPPER("Last Name") AS LastName, -- the last name column	
 	"First Name" AS FirstName,
 	Gender,
 	"Race or Ethnicity" AS Race,
@@ -104,11 +99,11 @@ SELECT
 	"Judiciary Committee Action (2)" AS CommitteeAction,
 	2 AS Appointment
 FROM
-	main.demographics
+	main.Demographics
 WHERE "Hearing Date (2)" IS NOT NULL -- only do this if there is an actual reported second hearing date
 UNION ALL -- Again, append another table if there was a third appointment
 SELECT
-	LastName,
+	UPPER("Last Name") AS LastName, -- the last name column
 	"First Name" AS FirstName,
 	Gender,
 	"Race or Ethnicity" AS Race,
@@ -122,11 +117,11 @@ SELECT
 	"Judiciary Committee Action (3)" AS CommitteeAction,
 	3 AS Appointment
 FROM
-	main.demographics
+	main.Demographics
 WHERE "Hearing Date (3)" IS NOT NULL -- only do this if there was an actual reported third hearing date
 UNION ALL -- Again, append another table if there was a fourth appointment
 SELECT
-	LastName,
+	UPPER("Last Name") AS LastName, -- the last name column
 	"First Name" AS FirstName,
 	Gender,
 	"Race or Ethnicity" AS Race,
@@ -140,11 +135,11 @@ SELECT
 	"Judiciary Committee Action (4)" AS CommitteeAction,
 	4 AS Appointment
 FROM
-	main.demographics
+	main.Demographics
 WHERE "Hearing Date (4)" IS NOT NULL -- only do this if there was an actual reported fourth hearing date
 UNION ALL -- Again, append another table if there was a fifth appointment
 SELECT
-	LastName,
+	UPPER("Last Name") AS LastName, -- the last name column
 	"First Name" AS FirstName,
 	Gender,
 	"Race or Ethnicity" AS Race,
@@ -158,11 +153,11 @@ SELECT
 	"Judiciary Committee Action (5)" AS CommitteeAction,
 	5 AS Appointment
 FROM
-	main.demographics
+	main.Demographics
 WHERE "Hearing Date (5)" IS NOT NULL -- only do this if there was an actual reported fifth hearing date
 UNION ALL -- Again, append a table if there was a 6th hearing date
 SELECT
-	LastName,
+	UPPER("Last Name") AS LastName, -- the last name column
 	"First Name" AS FirstName,
 	Gender,
 	"Race or Ethnicity" AS Race,
@@ -176,8 +171,9 @@ SELECT
 	"Judiciary Committee Action (6)" AS CommitteeAction,
 	1 AS Appointment
 FROM
-	main.demographics
+	main.Demographics
 WHERE "Hearing Date (6)" IS NOT NULL; -- but only do this if there was an actual reported sixth hearing date
+
 
 /* Check accuracy of pivoting table from wide to long format */
 SELECT -- grab a count of the number of appointments and in what year
@@ -238,3 +234,13 @@ INNER JOIN -- and join it with
 	m.HearingYear=t.HearingYear
 ORDER BY -- then sort the results in Descending order by the HearingYear
 	m.HearingYear DESC; -- the counts for each HearingYear should match between the two tables (merged). And they do!
+	
+/*
+	remove non-necessary views and tables now
+*/
+
+DROP VIEW main.Demographics;
+DROP VIEW main.TempDemographics;
+DROP VIEW main.TempMerged;
+DROP VIEW main.TempTranscript;
+DROP VIEW main.TranscriptTable;

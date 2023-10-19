@@ -9,3 +9,4 @@ archived
 data/transcripts
 # ignore files
 data/project_database.db
+data/project_database.db.wal

@@ -34,24 +34,22 @@ df = pl.concat(list_dfs, rechunk=True)
 conn.execute(
     '''
     CREATE TABLE 
-        transcript_text 
+        TranscriptText 
     AS SELECT 
         * 
     FROM 
         df
-    COMMIT;
     '''
 )
 # Load CSV file of demographic data and put it in a SQL table
 conn.execute(
     '''
-    CREATE TABLE
-        demographics
+    CREATE VIEW
+        Demographics
     AS SELECT
         *
     FROM
         read_csv_auto('./data/judge_demographic_data.csv')
-    COMMIT;
     '''
 )
 conn.close()
