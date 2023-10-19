@@ -50,7 +50,7 @@ COMMIT;
 
 /* A Check of how many rows are retained */
 
-SELECT COUNT(text) FROM main.TranscriptTable -- select a count of the number of rows in the TranscriptTable view
+SELECT COUNT(text) FROM main.TranscriptTable; -- select a count of the number of rows in the TranscriptTable view
 
 /*
 	Now on to the demographics table.
@@ -227,7 +227,7 @@ AS SELECT -- and select the count of rows as well as the HearingYear
 FROM
 	main.TranscriptTable AS t -- from the transcript table
 GROUP BY -- when it is grouped by the HearingYear
-	t.HearingYear
+	t.HearingYear;
 	
 SELECT -- Grab all of the columns
 	*
