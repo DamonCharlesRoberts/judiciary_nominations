@@ -7,3 +7,5 @@ desktop.ini
 # ignore folders
 archived
 data/transcripts
+# ignore files
+data/project_database.db
