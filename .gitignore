@@ -1,7 +1,12 @@
 # Ignore IDE file
 .vscode/
 desktop.ini
-**/.DS_Store
+.DS_Store
+# Ignore python files
+**/__pycache__/
 # ignore folders
 archived
 data/transcripts
+# ignore files
+data/project_database.db
+data/project_database.db.wal
