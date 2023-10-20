@@ -194,20 +194,19 @@ AS SELECT -- select all of the columns
 	*
 FROM
 	main.TranscriptTable AS t -- from the TranscriptTable that I alias as t
-LEFT JOIN -- and left join this with the TempDemographics table that I alias as d
+INNER JOIN -- and left join this with the TempDemographics table that I alias as d
 	main.TempDemographics AS d
 	ON -- and do this merge on the following
 		t.HearingYear=d.HearingYear -- the HearingYear columns
 		AND 
 		CAST(t.HearingMonth AS VARCHAR)=d.HearingMonth -- as well as the HearingMonth columns if a tie in HearingYear
 		AND
-		t.HearingDay=d.HearingDay -- as well as HearingDay if a tie in HearingYear and HearingMonth
-		AND
-		t.Name=d.LastName; -- as well as Name of speaker if a tie in HearingYear, HearingMonth, and HearingDay
+		t.HearingDay=d.HearingDay; -- as well as HearingDay if a tie in HearingYear and HearingMonth
 
+SELECT * FROM main.MergedTable 
 /* Check to see if the merge worked */
 		
-CREATE VIEW TempMerged -- create a temporary view
+CREATE OR REPLACE VIEW TempMerged -- create a temporary view
 AS SELECT -- and select the count of rows as well as the HearingYear
 	COUNT(m.speaker),
 	m.HearingYear
@@ -216,7 +215,7 @@ FROM
 GROUP BY
 	m.HearingYear; -- when it is grouped by the HearingYear
 
-CREATE VIEW TempTranscript -- create a temporary view
+CREATE OR REPLACE VIEW TempTranscript -- create a temporary view
 AS SELECT -- and select the count of rows as well as the HearingYear
 	COUNT(t.speaker),
 	t.HearingYear
@@ -234,7 +233,25 @@ INNER JOIN -- and join it with
 	m.HearingYear=t.HearingYear
 ORDER BY -- then sort the results in Descending order by the HearingYear
 	m.HearingYear DESC; -- the counts for each HearingYear should match between the two tables (merged). And they do!
-	
+
+/*
+	Make a view that reports the number of interruptions that occur per speaker
+ */
+
+SELECT -- select the count of interruptions
+	regexp_matches(text, '—\s$|\[continuing\]\.') AS interruption,
+	text,
+	Name,
+	Race,
+	Gender,
+	Title,
+	HearingMonth,
+	HearingDay,
+	HearingYear,
+FROM main.MergedTable
+ORDER BY interruption DESC;
+
+SELECT * FROM main.MergedTable 
 /*
 	remove non-necessary views and tables now
 */

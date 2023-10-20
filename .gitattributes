@@ -1,10 +1,9 @@
 # Auto detect text files and perform LF normalization
 *.qmd linguist-language=Python
 *.qmd linguist-language=Python
-/src/_extensions/andrewheiss/hikmah/partials/*.tex linguist-vendored
-/src/_extensions/adnrewheiss/hikmah/*.tex linguist-vendored
-/src/_extensions/andrewheiss/hikmah-manuscript/partials/*.tex linguist-vendored
-/src/_extensions/andrewheiss/hikmah-manuscript/*.tex linguist-vendored
-*.tex linguist-vendored
-/src/**.R linguist-vendored
-/test/**.R linguist-vendored
+./src/_extensions/andrewheiss/hikmah/partials/*.tex linguist-vendored
+./src/_extensions/adnrewheiss/hikmah/*.tex linguist-vendored
+./src/_extensions/andrewheiss/hikmah-manuscript/partials/*.tex linguist-vendored
+./src/_extensions/andrewheiss/hikmah-manuscript/*.tex linguist-vendored
+**.tex linguist-vendored
+archived/** linguist_vendored
