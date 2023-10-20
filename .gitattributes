@@ -3,4 +3,5 @@
 *.qmd linguist-language=Python
 **.tex linguist-language=Python
 ./src/_extensions/** linguist-vendored
+./drafts/**
 archived/** linguist_vendored
